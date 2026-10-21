@@ -1,4 +1,4 @@
-# bac-page v0.4.1
+# bac-page v0.4.2
 
 Build a CubeSat – CLI for the [bac.page](https://github.com/buildacubesat/bac-page) URL shortener. Each short link is a directory with an `index.html` redirect in the bac-page GitHub Pages repo; the tool writes the file, commits, and pushes.
 
@@ -32,6 +32,7 @@ Exit codes: 0 success, 1 runtime error, 2 bad arguments.
 
 | Version | Date | Change |
 | :-- | :-- | :-- |
+| 0.4.2 | 2026-10-21 | `--init` warns when `BAC_PAGE_REPO` overrides the path it just saved; a missing repo path set by `BAC_PAGE_REPO` names the variable instead of pointing to `--init`. |
 | 0.4.1 | 2026-10-21 | Repository renamed from `bac.page` to `bac-page`: prompts, help text and the default `--init` path now use the new name. |
 | 0.4.0 | 2026-08-28 | `list` (slug and destination columns) and `edit` become subcommands (`--list`/`--edit` flag forms kept as `-l/--list`; `--edit` removed). `list` sorts alphabetically by slug and renders a Rich table. Aligned with BAC Project & Tooling Guide v0.11 and Interface Design Guide v0.1: Rich output and spinner during git operations, `v`-prefixed version, `--config`/`--env-file`/`--dry-run`/`--debug` flags, TOML config at `~/.config/bac/bac-page.toml` (legacy `~/.config/bac-page/.env` still read), InquirerPy prompts with confirmation before pushes, `git mv` for renames, target URL validation, MIT license and pinned minimum dependency versions in `pyproject.toml`. Fixed slug error message (limit is 24, not 12). |
 | 0.3.5 | – | `--list`, `--edit`, `--version` flags; QR generation with format, inversion, transparency, error correction, and size options; python-dotenv config. |

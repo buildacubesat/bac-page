@@ -83,12 +83,19 @@ def save_config(path: Path | None, repo: Path) -> Path:
 def get_repo_path(config_path: Path | None) -> Path:
     """Resolve the bac-page repo: BAC_PAGE_REPO env var, then the TOML config."""
     repo = os.environ.get("BAC_PAGE_REPO")
+    from_env = bool(repo)
     if not repo:
         repo = load_config(config_path).get("repo", {}).get("path")
     if not repo:
         raise SystemExit(f"{TOOL} is not configured.\n       Run `{TOOL} --init` to set the repo path.")
     path = Path(repo).expanduser().resolve()
     if not path.is_dir():
+        if from_env:
+            raise SystemExit(
+                f"Repo path does not exist: {path}\n"
+                f"       It comes from BAC_PAGE_REPO, which overrides the config file.\n"
+                f"       Unset or update it (shell profile, --env-file, or ~/.config/bac-page/.env)."
+            )
         raise SystemExit(f"Repo path does not exist: {path}\n       Run `{TOOL} --init` to update it.")
     return path
 
@@ -112,6 +119,12 @@ def cmd_init(args: argparse.Namespace) -> None:
         return
     written = save_config(args.config, repo)
     console.print(f"  {OK} Config saved to [cyan]{written}[/]")
+    env_repo = os.environ.get("BAC_PAGE_REPO")
+    if env_repo and Path(env_repo).expanduser().resolve() != repo:
+        console.print(
+            f"  {WARN} BAC_PAGE_REPO is set to [cyan]{env_repo}[/] and overrides this config.\n"
+            f"    Unset or update it (shell profile, --env-file, or ~/.config/bac-page/.env)."
+        )
 
 
 # ---------------------------------------------------------------------------
