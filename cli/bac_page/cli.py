@@ -81,7 +81,7 @@ def save_config(path: Path | None, repo: Path) -> Path:
 
 
 def get_repo_path(config_path: Path | None) -> Path:
-    """Resolve the bac.page repo: BAC_PAGE_REPO env var, then the TOML config."""
+    """Resolve the bac-page repo: BAC_PAGE_REPO env var, then the TOML config."""
     repo = os.environ.get("BAC_PAGE_REPO")
     if not repo:
         repo = load_config(config_path).get("repo", {}).get("path")
@@ -99,8 +99,8 @@ def cmd_init(args: argparse.Namespace) -> None:
     current = load_config(args.config).get("repo", {}).get("path") or os.environ.get("BAC_PAGE_REPO")
     console.print(f"[bold]Build a CubeSat – {TOOL} {VERSION}[/bold]\n")
     path_str = inquirer.text(
-        message="Path to the bac.page git repo:",
-        default=current or str(Path.home() / "repos" / "bac.page"),
+        message="Path to the bac-page git repo:",
+        default=current or str(Path.home() / "repos" / "bac-page"),
     ).execute().strip()
     repo = Path(path_str).expanduser().resolve()
     if not repo.is_dir():
@@ -442,7 +442,7 @@ EPILOG = f"""commands:
   <url> [slug]     create a redirect (same as `add`); slug is 1–{SLUG_MAX} chars, random if omitted
   list             list all redirects, sorted by short name
   edit             edit a redirect: change slug, change destination, generate QR code
-  init             configure the bac.page repo path (same as --init)
+  init             configure the bac-page repo path (same as --init)
 
 examples:
   {TOOL} https://buildacubesat.space/docs/eps eps-docs --qr
@@ -513,7 +513,7 @@ def parse(argv: list[str]) -> tuple[str, argparse.Namespace]:
         "add": build_add_parser,
         "list": build_list_parser,
         "edit": lambda: build_simple_parser("edit", "Edit an existing redirect."),
-        "init": lambda: build_simple_parser("init", "Configure the bac.page repo path."),
+        "init": lambda: build_simple_parser("init", "Configure the bac-page repo path."),
     }[command]()
     sub_args = sub.parse_args(rest)
     return command, argparse.Namespace(**vars(args), **vars(sub_args))
